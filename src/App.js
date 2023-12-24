@@ -7,6 +7,8 @@ import Home from './Home'
 const App = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [invoice, setInvoice] = useState(false);
+  const [showExitConfirmation, setShowExitConfirmation] = useState(false);
+
 
   useEffect(() => {
     const checkScreenWidth = () => {
@@ -31,31 +33,15 @@ const App = () => {
       ) : (
       <div className='bg-[#141625] h-[100vh]  min-[900px]:flex-row'>
 
-        <div className='bg-red-400 w-full h-full flex'>
+        <div className=' w-full h-full flex'>
           <Navigation />
-          
            {invoice &&(<div className=' flex[1] relative flex flex-col '>
             <div className="invoice">
-               <InvoiceModal setInvoice={setInvoice} />
+               <InvoiceModal setInvoice={setInvoice} setShowExitConfirmation={setShowExitConfirmation} />
             </div>
           </div>)}
-          {/* <div className='text-white h-full max-w-[100px] w-[20%] bg-green-400'>
-           <div className=' bg-cyan-600 p-2'> AREA </div>
-          </div> */}
-          <Home setInvoice={setInvoice} />
-          {/* <div className='min-w-[80%] w-full p-4 flex flex-col gap-4 bg-yellow-200'>
-            <div className='bg-orange-400 flex justify-center p-4'> 
-              INVOIICE AREA 
-            </div>
-            <div className='bg-red-600 flex justify-center h-full'>MAIN AREA </div>
-          </div> */}
+          <Home setInvoice={setInvoice} showExitConfirmation={showExitConfirmation} />
         </div>
-        {/* <Navigation />
-        <div className='p-[20px] bg-yellow-600 flex[1] relative flex flex-col '>
-          <transition className="invoice">
-            <InvoiceModal invoice={invoice} setInvoice={setInvoice} />
-          </transition>
-        </div> */}
       </div>
       )}
     </div>
