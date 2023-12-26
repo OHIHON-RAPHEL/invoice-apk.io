@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import HeightIcon from '@mui/icons-material/Height';
-import Modal from './Modal'
+import Invoice from './Invoice'
+// import Modal from './Modal'
 
 const Home = ({ setInvoice, showExitConfirmation }) => {
   const [filterMenu, setFilterMenu] = useState(false);
@@ -42,8 +43,10 @@ const Home = ({ setInvoice, showExitConfirmation }) => {
            </div>
         </div>
       </div>
-
-       <Modal showExitConfirmation={showExitConfirmation} />
+      <div>
+        <Invoice />
+      </div>
+       {/* <Modal showExitConfirmation={showExitConfirmation} /> */}
     </div>
   )
 }

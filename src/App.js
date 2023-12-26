@@ -3,11 +3,30 @@ import Navigation from './Navigation'
 import InvoiceModal from './InvoiceModal'
 import './App.css'
 import Home from './Home'
+import { getDatabase, ref, onValue } from 'firebase/database';
 
-const App = () => {
+const App = ({database}) => {
   const [isMobile, setIsMobile] = useState(false);
   const [invoice, setInvoice] = useState(false);
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
+  // const [entries, setEntries] = useState([]);
+   
+  // useEffect(() => {
+
+  //   const entriesRef = ref(database, 'entries');
+
+  //   onValue(entriesRef, (snapshot) => {
+  //     const data = snapshot.val();
+  //     if (data) {
+  //       const entriesArray = Object.keys(data).map((key) => ({
+  //         id: key,
+  //         ...data[key],
+  //       }));
+  //       console.log(entriesArray)
+  //     }
+  //   });
+  // }, []);
+
 
 
   useEffect(() => {
@@ -37,7 +56,7 @@ const App = () => {
           <Navigation />
            {invoice &&(<div className=' flex[1] relative flex flex-col '>
             <div className="invoice">
-               <InvoiceModal setInvoice={setInvoice} setShowExitConfirmation={setShowExitConfirmation} />
+               <InvoiceModal database={database} setInvoice={setInvoice} setShowExitConfirmation={setShowExitConfirmation} />
             </div>
           </div>)}
           <Home setInvoice={setInvoice} showExitConfirmation={showExitConfirmation} />

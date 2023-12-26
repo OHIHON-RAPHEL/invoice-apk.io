@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState} from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HeightIcon from '@mui/icons-material/Height';
-// import database from './firebase';
+// import Loading from './Loading'
+import { ref, push } from 'firebase/database';
 
 
-const InvoiceModal = ({ setInvoice, setShowExitConfirmation }) => {
+const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database }) => {
   
 
   const initialDate = new Date();
@@ -59,7 +60,7 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation }) => {
   }
 
   const [formData, setFormData] = useState({
-    clientStreetAddress: "",
+        clientStreetAddress: "",
         clientCity: "",
         clientZipCode: "",
         clientCountry: "",
@@ -71,77 +72,92 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation }) => {
         paymentTerms: ""
   })
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-
-  //   // Save data to Firebase
-  //   database.ref('formData').push(formData);
-
+  // const handleChange = (e) => {
   //   setFormData({
-  //     clientStreetAddress: "",
-  //       clientCity: "",
-  //       clientZipCode: "",
-  //       clientCountry: "",
-  //       clientName: "",
-  //       clientEmail: "",
-  //       paymentDue: "",
-  //       productDescription: "",
-  //       text: "",
-  //       paymentTerms: ""
-  //   })
-
+  //     ...formData,
+  //     [e.target.name]: e.target.value,
+  //   });
   // };
 
-  const invoiceRef = useRef(false);
-  
-  const handleClickOutside = (event) => {
-    if (invoiceRef.current && !invoiceRef.current.contains(event.target)) {
-      setShowExitConfirmation(true);
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  // Listen for click events outside the input field background
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+    const entriesRef = ref(database, 'entries');
+
+    try {
+      const newEntryData = await push(entriesRef, formData);
+
+      console.log('Data submitted successfully with key:', newEntryData.key);
+    } catch (error) {
+      console.log(error);
+    }
+
+    setFormData({
+        clientStreetAddress: "",
+        clientCity: "",
+        clientZipCode: "",
+        clientCountry: "",
+        clientName: "",
+        clientEmail: "",
+        paymentDue: "",
+        productDescription: "",
+        text: "",
+        paymentTerms: ""
+    })
+
+    setInvoice(false)
+  };
+
+  // const invoiceRef = useRef(false);
+  
+  // const handleClickOutside = (event) => {
+  //   if (invoiceRef.current && !invoiceRef.current.contains(event.target)) {
+  //     setShowExitConfirmation(true);
+  //   }
+  // };
+
+  // // Listen for click events outside the input field background
+  // useEffect(() => {
+  //   document.addEventListener('mousedown', handleClickOutside);
+
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, []);
 
    
   return (
-    <div ref={invoiceRef} className=' fixed top-0 left-0 bg-[transparent] h-screen overflow-scroll min-[900px]:left-[90px]'>
+    <div onSubmit={handleSubmit} className=' fixed top-0 left-0 bg-[transparent] h-screen overflow-scroll min-[900px]:left-[90px]'>
       <form  className='relative p-[56px] max-w-[700px] w-full bg-[#141625] text-white
        shadow-[10px_4px_6px_-1px_rgba(0,0,0.2),_0_2px_4px_-1px_rgba(0_0_0_0.06)] '>
-        <h1 className='mb-[48px] text-white'>New Invoice</h1>
+        <h1 className='mb-[48px] text-white font-bold text-2xl'>New Invoice</h1>
           {/* bill form */}
         <div className='mb-[48px] flex flex-col'>
            <h4 className='text-[#7c5dfa] text-[12px] mb-[24px]'>Bill Form</h4>
            <div className='mb-[24px] flex flex-col'>
               <small className='text-[12px] mb-[6px]'>Street Address</small>
-              <input onChange={handleChange} name="clientStreetAdddress"  type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+              <input value={formData.clientStreetAddress} onChange={handleChange} name="clientStreetAdddress"  type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
             </div>
             <div className='gap-[16px] flex'>
               <div className='mb-[24px] flex flex-col flex-[1]'>
                 <small className='text-[12px] mb-[6px]'>City</small>
-                <input onChange={handleChange} name="clientCity" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+                <input value={formData.clientCity} onChange={handleChange} name="clientCity" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
               </div>
               <div className='mb-[24px] flex flex-col flex-[1]'>
                 <small className='text-[12px] mb-[6px]'>Zip Code</small>
-                <input onChange={handleChange} name="clientZipCode" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+                <input value={formData.clientZipCode} onChange={handleChange} name="clientZipCode" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
               </div>
               <div className='mb-[24px] flex flex-col flex-[1]'>
                 <small className='text-[12px] mb-[6px]'>Country</small>
-                <input onChange={handleChange} name="clientCountry" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+                <input value={formData.clientCountry} onChange={handleChange} name="clientCountry" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
               </div>
             </div>
         </div>
@@ -151,28 +167,28 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation }) => {
          <h4 className='text-[#7c5dfa] text-[12px] mb-[24px]'>Bill to</h4>
          <div className='mb-[24px] flex flex-col'>
            <small className='text-[12px] mb-[6px]'>Client Name</small>
-           <input onChange={handleChange} name="clientName" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+           <input value={formData.clientName} onChange={handleChange} name="clientName" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
          </div>
          <div className='mb-[24px] flex flex-col'>
            <small className='text-[12px] mb-[6px]'>Client Email</small>
-           <input onChange={handleChange} name="clientEmail" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+           <input value={formData.clientEmail} onChange={handleChange} name="clientEmail" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
          </div>
          <div className='mb-[24px] flex flex-col'>
            <small className='text-[12px] mb-[6px]'>Street Address</small>
-           <input onChange={handleChange} name="clientStreetAddress"  type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+           <input value={formData.clientStreetAddress} onChange={handleChange} name="clientStreetAddress"  type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
          </div>
          <div className='gap-[16px] flex'>
               <div className='mb-[24px] flex flex-col'>
                 <small className='text-[12px] mb-[6px]'>City</small>
-                <input onChange={handleChange} name="clientCity" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+                <input value={formData.clientCity} onChange={handleChange} name="clientCity" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
               </div>
               <div className='mb-[24px] flex flex-col'>
                 <small className='text-[12px] mb-[6px]'>Zip Code</small>
-                <input onChange={handleChange} name="clientZipCode" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+                <input value={formData.clientZipCode} onChange={handleChange} name="clientZipCode" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
               </div>
               <div className='mb-[24px] flex flex-col'>
                 <small className='text-[12px] mb-[6px]'>Country</small>
-                <input onChange={handleChange} name="clientCountry"  type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+                <input value={formData.clientCountry} onChange={handleChange} name="clientCountry"  type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
               </div>
             </div>
        </div>
@@ -186,25 +202,25 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation }) => {
               name="invoiceDate"
               onChange={handleDateChange}
               type="date"
-              value={dateValue.toISOString().slice(0, 10)}
+              value={`${dateValue.toISOString().slice(0, 10)}, ${formData.invoiceDate}`}
               className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none'
             />
           </div>
           <div className='mb-[24px] flex flex-col flex-[1]'>
             <small className='text-[12px] mb-[6px]'>Payment Due</small>
-            <input onChange={handleChange} value={dueDate} name="paymentDue"   type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+            <input onChange={handleChange} value={`${dueDate}, ${formData.paymentDue}`}  name="paymentDue"   type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
           </div>
         </div>
         <div className='mb-[24px] flex flex-col'>
           <small  className='text-[12px] mb-[6px]'>Payment Terms</small>
           <select name="paymentTerms"  onChange={handleSelectChange} className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none'>
-            <option  value="next30Days" >Next 30 Days</option>
+            <option  value={`"next30Days", ${formData.paymentTerms}`} >Next 30 Days</option>
             <option  value="next60Days" >Next 60 Days</option>
           </select>
         </div>
         <div className='mb-[24px] flex flex-col'>
           <small className='text-[12px] mb-[6px]'>Product Description</small>
-          <input onChange={handleChange} name="productDescription" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+          <input value={formData.productDescription} onChange={handleChange} name="productDescription" type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
         </div>
         <div className='w-full'>
           <h3 className='mb-[16px] text-[18px] text-[#777f98]'>Item List</h3>
@@ -217,9 +233,9 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation }) => {
             </div>
             {inputFields.map((item, index) => (
                <div key={index} className='gap-4 text-[12px] relative mb-[24px] flex'>
-                  <input onChange={handleChange} name="text" type="text" className='bg-[#1e2139] p-[5px] basis-6/12 text-left text-white rounded-md border-none focus:outline-none' />
-                  <input onChange={handleChange} name="text" type="text" className='bg-[#1e2139] p-[5px] basis-[10%] text-left text-white rounded-md border-none focus:outline-none' />
-                  <input onChange={handleChange} name="text" type="text" className='bg-[#1e2139] p-[5px] basis-1/5 text-left text-white rounded-md border-none focus:outline-none'/>
+                  <input value={formData.text} onChange={handleChange} name="text" type="text" className='bg-[#1e2139] p-[5px] basis-6/12 text-left text-white rounded-md border-none focus:outline-none' />
+                  <input value={formData.text} onChange={handleChange} name="text" type="text" className='bg-[#1e2139] p-[5px] basis-[10%] text-left text-white rounded-md border-none focus:outline-none' />
+                  <input value={formData.text} onChange={handleChange} name="text" type="text" className='bg-[#1e2139] p-[5px] basis-1/5 text-left text-white rounded-md border-none focus:outline-none'/>
                   <small className='basis-1/5 self-center flex'>something</small>
                   <DeleteIcon onClick={() => deleteInvoiceItem(item.id)} className='absolute  right-0 w-[12px] h-[16px] cursor-pointer' />
                </div>
