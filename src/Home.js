@@ -2,9 +2,10 @@ import { useState } from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import HeightIcon from '@mui/icons-material/Height';
 import Invoice from './Invoice'
+import IMG from './images/looking.png'
 // import Modal from './Modal'
 
-const Home = ({ setInvoice, showExitConfirmation }) => {
+const Home = ({ setInvoice, showExitConfirmation, entries }) => {
   const [filterMenu, setFilterMenu] = useState(false);
 
   const toggleMenu = () => {
@@ -43,12 +44,21 @@ const Home = ({ setInvoice, showExitConfirmation }) => {
            </div>
         </div>
       </div>
-      <div>
-        <Invoice />
-      </div>
-       {/* <Modal showExitConfirmation={showExitConfirmation} /> */}
+      {entries.length > 0 ? (
+        entries.map((entry, index) => (
+        <div className='flex justify-center' key={index}>
+          <Invoice entry={entry}/>
+        </div>))
+      ) : (
+        <div className='mt-[160px] items-center flex flex-col'>
+          <img src={IMG} alt="" className='w-[214] h-[200px]' />
+          <h3 className='text-[20px] mt-[40px] '>There is nothing here</h3>
+          <p className='text-center  text-[12px] font-semibold'>Create a new invoice by clicking the New Invoice button and get started</p>
+        </div>
+      )}
     </div>
   )
 }
 
 export default Home
+ 

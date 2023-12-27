@@ -2,30 +2,32 @@ import { useState, useEffect } from 'react'
 import Navigation from './Navigation'
 import InvoiceModal from './InvoiceModal'
 import './App.css'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Home from './Home'
-import { getDatabase, ref, onValue } from 'firebase/database';
+import { ref, onValue } from 'firebase/database';
 
-const App = ({database}) => {
+const App = ({ database }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [invoice, setInvoice] = useState(false);
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
-  // const [entries, setEntries] = useState([]);
+
+  const [entries, setEntries] = useState([]);
    
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   const entriesRef = ref(database, 'entries');
+    const entriesRef = ref(database, 'entries');
 
-  //   onValue(entriesRef, (snapshot) => {
-  //     const data = snapshot.val();
-  //     if (data) {
-  //       const entriesArray = Object.keys(data).map((key) => ({
-  //         id: key,
-  //         ...data[key],
-  //       }));
-  //       console.log(entriesArray)
-  //     }
-  //   });
-  // }, []);
+    onValue(entriesRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const entriesArray = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        setEntries(entriesArray)
+      }
+    });
+  }, );
 
 
 
@@ -43,6 +45,7 @@ const App = ({database}) => {
   }, []);
 
   return (
+    <BrowserRouter>
     <div>
       {isMobile ? (
         <div className='text-center justify-center items-center h-screen bg-[#141625] text-white'>
@@ -59,11 +62,15 @@ const App = ({database}) => {
                <InvoiceModal database={database} setInvoice={setInvoice} setShowExitConfirmation={setShowExitConfirmation} />
             </div>
           </div>)}
-          <Home setInvoice={setInvoice} showExitConfirmation={showExitConfirmation} />
+          <Home setInvoice={setInvoice} showExitConfirmation={showExitConfirmation} entries={entries} />
         </div>
       </div>
       )}
     </div>
+    <Routes>
+      {/* <Route path='' element={<c/>}/> */}
+    </Routes>
+    </BrowserRouter>
   )
 }
 

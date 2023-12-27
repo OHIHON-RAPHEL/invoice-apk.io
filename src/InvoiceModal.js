@@ -6,16 +6,7 @@ import { ref, push } from 'firebase/database';
 
 
 const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database }) => {
-  
 
-  const initialDate = new Date();
-
-  const [dateValue, setDateValue] = useState(initialDate);
-
-  const handleDateChange = (event) => {
-    const newDateValue = new Date(event.target.value);
-    setDateValue(newDateValue);
-  };
   
   const close = () => {
      setInvoice(false)
@@ -24,20 +15,21 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database }) => {
   const [dueDate, setDueDate] = useState('');
 
   const handleSelectChange = (event) => {
-    const selectedOption = event.target.value;
+    const selectedOption = event.target.value;  
 
     if (selectedOption === 'next30Days' || selectedOption === 'next60Days') {
       const currentDate = new Date();
       let daysToAdd = selectedOption === 'next30Days' ? 30 : 60;
       const nextDueDate = new Date(currentDate.setDate(currentDate.getDate() + daysToAdd));
 
-      // Format the date as 'YYYY-MM-DD'
       const formattedDate = nextDueDate.toISOString().slice(0, 10);
       
-      // Update the state with the formatted date
-      setDueDate(formattedDate);
+      const g = {
+        ...formData,
+        paymentDue: formattedDate
+      }
+      setFormData(g)
     } else {
-      // Handle other options if needed
       setDueDate('');
     }
   };
@@ -66,18 +58,13 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database }) => {
         clientCountry: "",
         clientName: "",
         clientEmail: "",
-        paymentDue: "",
+        invoiceDate: new Date().toISOString().slice(0, 10),
+        paymentDue: dueDate,
         productDescription: "",
-        text: "",
-        paymentTerms: ""
-  })
-
-  // const handleChange = (e) => {
-  //   setFormData({
-  //     ...formData,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
+        itemName: "",
+        qty: "",
+        price: "",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -144,7 +131,7 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database }) => {
            <h4 className='text-[#7c5dfa] text-[12px] mb-[24px]'>Bill Form</h4>
            <div className='mb-[24px] flex flex-col'>
               <small className='text-[12px] mb-[6px]'>Street Address</small>
-              <input value={formData.clientStreetAddress} onChange={handleChange} name="clientStreetAdddress"  type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+              <input value={formData.clientStreetAddress} onChange={handleChange} name="clientStreetAddress"  type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
             </div>
             <div className='gap-[16px] flex'>
               <div className='mb-[24px] flex flex-col flex-[1]'>
@@ -198,23 +185,21 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database }) => {
         <div className='gap-6 flex'>
           <div className='mb-[24px] flex flex-col flex[1]'>
             <small className='text-[12px] mb-[6px]'>Invoice Date</small>
-            <input
-              name="invoiceDate"
-              onChange={handleDateChange}
-              type="date"
-              value={`${dateValue.toISOString().slice(0, 10)}, ${formData.invoiceDate}`}
+            <div
               className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none'
-            />
+            >
+              {formData.invoiceDate}
+            </div>
           </div>
           <div className='mb-[24px] flex flex-col flex-[1]'>
             <small className='text-[12px] mb-[6px]'>Payment Due</small>
-            <input onChange={handleChange} value={`${dueDate}, ${formData.paymentDue}`}  name="paymentDue"   type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
+            <input onChange={handleChange} value={formData.paymentDue}  name="paymentDue"   type="text" className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none' />
           </div>
         </div>
         <div className='mb-[24px] flex flex-col'>
           <small  className='text-[12px] mb-[6px]'>Payment Terms</small>
-          <select name="paymentTerms"  onChange={handleSelectChange} className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none'>
-            <option  value={`"next30Days", ${formData.paymentTerms}`} >Next 30 Days</option>
+          <select name="paymentTerms" onChange={handleSelectChange}  className='w-full bg-[#1e2139] text-white rounded-md p-[12px_4px] border-none focus:outline-none'>
+            <option  value="next30Days" >Next 30 Days</option>
             <option  value="next60Days" >Next 60 Days</option>
           </select>
         </div>
@@ -233,10 +218,10 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database }) => {
             </div>
             {inputFields.map((item, index) => (
                <div key={index} className='gap-4 text-[12px] relative mb-[24px] flex'>
-                  <input value={formData.text} onChange={handleChange} name="text" type="text" className='bg-[#1e2139] p-[5px] basis-6/12 text-left text-white rounded-md border-none focus:outline-none' />
-                  <input value={formData.text} onChange={handleChange} name="text" type="text" className='bg-[#1e2139] p-[5px] basis-[10%] text-left text-white rounded-md border-none focus:outline-none' />
-                  <input value={formData.text} onChange={handleChange} name="text" type="text" className='bg-[#1e2139] p-[5px] basis-1/5 text-left text-white rounded-md border-none focus:outline-none'/>
-                  <small className='basis-1/5 self-center flex'>something</small>
+                  <input value={formData.itemName} onChange={handleChange} name="itemName" type="text" className='bg-[#1e2139] p-[5px] basis-6/12 text-left text-white rounded-md border-none focus:outline-none' />
+                  <input value={formData.qty} onChange={handleChange} name="qty" type="text" className='bg-[#1e2139] p-[5px] basis-[10%] text-left text-white rounded-md border-none focus:outline-none' />
+                  <input value={formData.price} onChange={handleChange} name="price" type="text" className='bg-[#1e2139] p-[5px] basis-1/5 text-left text-white rounded-md border-none focus:outline-none'/>
+                  <small className='basis-1/5 self-center flex'>{formData.price}</small>
                   <DeleteIcon onClick={() => deleteInvoiceItem(item.id)} className='absolute  right-0 w-[12px] h-[16px] cursor-pointer' />
                </div>
             ))}
