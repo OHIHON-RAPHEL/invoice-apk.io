@@ -15,6 +15,8 @@ const App = ({ database }) => {
   const [invoice, setInvoice] = useState(false);
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
 
+  const [editInvoice, setEditInvoice] = useState(false)
+
   const [entries, setEntries] = useState([]);
    
   useEffect(() => {
@@ -52,8 +54,8 @@ const App = ({ database }) => {
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/entry/:id"  element={<InvoiceView database={database} />} />
-      <Route path="/" element={<MainApp database={database} isMobile={isMobile} invoice={invoice} setInvoice={setInvoice} showExitConfirmation={showExitConfirmation} entries={entries} setShowExitConfirmation={setShowExitConfirmation} />} />
+      <Route path="/entry/:id"  element={<InvoiceView  entries={entries} setEntries={setEntries} database={database} setEditInvoice={setEditInvoice} editInvoice={editInvoice} setInvoice={setInvoice} />} />
+      <Route index element={<MainApp database={database} isMobile={isMobile} invoice={invoice} setInvoice={setInvoice} showExitConfirmation={showExitConfirmation} entries={entries} setShowExitConfirmation={setShowExitConfirmation} setEditInvoice={setEditInvoice} />} />
     </Routes>
     </BrowserRouter>
   )

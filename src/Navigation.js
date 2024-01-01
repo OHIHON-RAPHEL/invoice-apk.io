@@ -7,7 +7,6 @@ const Navigation = () => {
       <div className=' rounded-[20px] bg-[#7c5dfa]  p-[24px] min-[900px]:w-full'>
          <ArticleIcon  className='text-blue-500 ' />
       </div>
-      {/* <div className=' bg-cyan-600 p-2'> AREA </div> */}
     </div>
   )
 }

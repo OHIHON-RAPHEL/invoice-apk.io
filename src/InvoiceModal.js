@@ -5,12 +5,15 @@ import HeightIcon from '@mui/icons-material/Height';
 import { ref, push } from 'firebase/database';
 
 
-const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database }) => {
+const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database, setEditInvoice, invoice }) => {
 
   
   const close = () => {
-     setInvoice(false)
+     setInvoice(false);
+
+     setEditInvoice(false)
   };
+
 
   const [dueDate, setDueDate] = useState('');
 
@@ -125,7 +128,7 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database }) => {
     <div onSubmit={handleSubmit} className=' fixed top-0 left-0 bg-[transparent] h-screen overflow-scroll min-[900px]:left-[90px]'>
       <form  className='relative p-[56px] max-w-[700px] w-full bg-[#141625] text-white
        shadow-[10px_4px_6px_-1px_rgba(0,0,0.2),_0_2px_4px_-1px_rgba(0_0_0_0.06)] '>
-        <h1 className='mb-[48px] text-white font-bold text-2xl'>New Invoice</h1>
+        {invoice ? <h1 className='mb-[48px] text-white font-bold text-2xl'>New Invoice</h1> : <h1 className='mb-[48px] text-white font-bold text-2xl'>Edit Invoice</h1>}
           {/* bill form */}
         <div className='mb-[48px] flex flex-col'>
            <h4 className='text-[#7c5dfa] text-[12px] mb-[24px]'>Bill Form</h4>
@@ -239,10 +242,10 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database }) => {
             <div className='left flex-[1]'>
               <button type="button" onClick={close} className='bg-[#ec5757] cursor-pointer p-[16px_24px] rounded-2xl border-none text-[12px] mr-[8px] text-white'>Cancel</button>
             </div>
-            <div className='justify-end flex flex-[1]'>
+            {invoice ? <div className='justify-end flex flex-[1]'>
               <button type="submit" className='bg-[#252945] cursor-pointer p-[16px_24px] rounded-2xl border-none text-[12px] mr-[8px] text-white'>Save Draft</button>
               <button type="submit" className='bg-[#7c5dfa] cursor-pointer p-[16px_24px] rounded-2xl border-none text-[12px] mr-[8px] text-white'>Create Invoice</button>
-            </div>
+            </div> : <button type="submit" className='bg-[#7c5dfa] cursor-pointer p-[16px_24px] rounded-2xl border-none text-[12px] mr-[8px] text-white'>Update Invoice</button>}
         </div>
       </form>
     </div>
