@@ -5,7 +5,7 @@ import HeightIcon from '@mui/icons-material/Height';
 import { ref, push } from 'firebase/database';
 
 
-const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database, setEditInvoice, invoice }) => {
+const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database, setEditInvoice, invoice, entries }) => {
 
   
   const close = () => {
@@ -80,6 +80,7 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database, setEditIn
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (invoice) {
     const entriesRef = ref(database, 'entries');
 
     try {
@@ -89,7 +90,7 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database, setEditIn
     } catch (error) {
       console.log(error);
     }
-
+    
     setFormData({
         clientStreetAddress: "",
         clientCity: "",
@@ -99,11 +100,25 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database, setEditIn
         clientEmail: "",
         paymentDue: "",
         productDescription: "",
-        text: "",
-        paymentTerms: ""
+        paymentTerms: "",
+        itemName: "",
+        qty: "",
+        price: "",
     })
 
     setInvoice(false)
+
+    return handleUpdateInvoice();
+    
+   }
+
+  };
+
+  const handleUpdateInvoice = () => {
+    console.log("form data updated", formData);
+    
+
+    setEditInvoice(false)
   };
 
   // const invoiceRef = useRef(false);
@@ -242,10 +257,11 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database, setEditIn
             <div className='left flex-[1]'>
               <button type="button" onClick={close} className='bg-[#ec5757] cursor-pointer p-[16px_24px] rounded-2xl border-none text-[12px] mr-[8px] text-white'>Cancel</button>
             </div>
-            {invoice ? <div className='justify-end flex flex-[1]'>
+            {invoice ?
+            <div className='justify-end flex flex-[1]'>
               <button type="submit" className='bg-[#252945] cursor-pointer p-[16px_24px] rounded-2xl border-none text-[12px] mr-[8px] text-white'>Save Draft</button>
               <button type="submit" className='bg-[#7c5dfa] cursor-pointer p-[16px_24px] rounded-2xl border-none text-[12px] mr-[8px] text-white'>Create Invoice</button>
-            </div> : <button type="submit" className='bg-[#7c5dfa] cursor-pointer p-[16px_24px] rounded-2xl border-none text-[12px] mr-[8px] text-white'>Update Invoice</button>}
+            </div> : <button onClick={handleUpdateInvoice} className='bg-[#7c5dfa] cursor-pointer p-[16px_24px] rounded-2xl border-none text-[12px] mr-[8px] text-white'>Update Invoice</button>}
         </div>
       </form>
     </div>

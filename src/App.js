@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react'
-// import Navigation from './Navigation'
-// import InvoiceModal from './InvoiceModal'
 import './App.css'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
-// import Home from './Home'
 import { ref, onValue } from 'firebase/database';
 import MainApp from './MainApp'
 
@@ -14,6 +11,24 @@ const App = ({ database }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [invoice, setInvoice] = useState(false);
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
+
+//   const [dueDate, setDueDate] = useState('');
+
+//   const [formData, setFormData] = useState({
+//     clientStreetAddress: "",
+//     clientCity: "",
+//     clientZipCode: "",
+//     clientCountry: "",
+//     clientName: "",
+//     clientEmail: "",
+//     invoiceDate: new Date().toISOString().slice(0, 10),
+//     paymentDue: "",
+//     productDescription: "",
+//     itemName: "",
+//     qty: "",
+//     price: "",
+// });
+
 
   const [editInvoice, setEditInvoice] = useState(false)
 
@@ -54,8 +69,8 @@ const App = ({ database }) => {
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/entry/:id"  element={<InvoiceView  entries={entries} setEntries={setEntries} database={database} setEditInvoice={setEditInvoice} editInvoice={editInvoice} setInvoice={setInvoice} />} />
-      <Route index element={<MainApp database={database} isMobile={isMobile} invoice={invoice} setInvoice={setInvoice} showExitConfirmation={showExitConfirmation} entries={entries} setShowExitConfirmation={setShowExitConfirmation} setEditInvoice={setEditInvoice} />} />
+      <Route path="/entry/:id"  element={<InvoiceView entries={entries} setEntries={setEntries} database={database} setEditInvoice={setEditInvoice} editInvoice={editInvoice} setInvoice={setInvoice} />} />
+    <Route index element={<MainApp database={database} isMobile={isMobile} invoice={invoice} setInvoice={setInvoice} showExitConfirmation={showExitConfirmation} entries={entries} setShowExitConfirmation={setShowExitConfirmation} setEditInvoice={setEditInvoice} />} />
     </Routes>
     </BrowserRouter>
   )

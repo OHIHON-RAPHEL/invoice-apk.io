@@ -2,16 +2,18 @@ import { useState, useEffect} from 'react'
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import {Link} from 'react-router-dom'
 import { useParams } from 'react-router-dom';
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, remove } from 'firebase/database';
 import InvoiceModal from '../../InvoiceModal'
+import {useNavigate} from 'react-router-dom'
+
 
   
-const InvoiceView = ({database, entries, setEntries, setInvoice, setEditInvoice, editInvoice }) => {
-  
+const InvoiceView = ({ database, entries, setEntries, setInvoice, setEditInvoice, editInvoice }) => {
+  const navigate = useNavigate();
+
+  const [isPaid,setIsPaid] = useState(false);
 
   const { id } = useParams();
-  
-  // const pageEntry = entries
 
   useEffect(() => {
 
@@ -30,17 +32,37 @@ const InvoiceView = ({database, entries, setEntries, setInvoice, setEditInvoice,
 
   if (!entries) {
     return <div>Loading...</div>;
-  }
+  };
+
   const toggleEdit = () => {
-    setEditInvoice(true)
-  }
+    setEditInvoice(true);
+  };
+
+  const handleDelete = () => {
+
+    const entryRef = ref(database, `entries/${id}`);
+
+    remove(entryRef)
+      .then(() => {
+        console.log('Entry deleted successfully');
+      })
+      .catch((error) => {
+        console.error('Error deleting entry:', error);
+      });
+  
+    navigate("/")
+  };
+
+  const handleClick = () => {
+    setIsPaid(!isPaid);
+  };
   
 
   return (
     <div className='flex justify-center bg-[#141625] h-fit'>
 
     {editInvoice && (
-     <div className=' flex[1] relative flex flex-col '>
+     <div className='flex[1] relative flex flex-col '>
        <InvoiceModal database={database} setInvoice={setInvoice} setEditInvoice={setEditInvoice} editIvoice={editInvoice}  />
      </div>)}
 
@@ -60,9 +82,8 @@ const InvoiceView = ({database, entries, setEntries, setInvoice, setEditInvoice,
         </div>
         <div className='flex flex-[1] justify-end'>
           <button onClick={toggleEdit} className='text-white  bg-[#500050] cursor-pointer p-[16px_24px] rounded-3xl border-none text-[12px] mr-[8px]'>Edit</button>
-          <button className='red text-white bg-[#ec5757] cursor-pointer p-[16px_24px] rounded-3xl border-none text-[12px] mr-[8px]'>Delete</button>
-          <button className='green text-white bg-[#33d69f] cursor-pointer p-[16px_24px] rounded-3xl border-none text-[12px]'>Mark as Paid</button>
-          {/* <button className='orange text-white'>Mark as Pending</button> */}
+          <button onClick={handleDelete} className='red text-white bg-[#ec5757] cursor-pointer p-[16px_24px] rounded-3xl border-none text-[12px] mr-[8px]'>Delete</button>
+          <button onClick={handleClick} className='green text-white bg-[#33d69f] cursor-pointer p-[16px_24px] rounded-3xl border-none text-[12px]'>{isPaid ? "Mark as Pending" : "Mark as Paid"}</button>
         </div>
       </div>
 

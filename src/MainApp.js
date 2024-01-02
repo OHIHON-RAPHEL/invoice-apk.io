@@ -3,7 +3,7 @@ import Navigation from './Navigation'
 import InvoiceModal from './InvoiceModal'
 import Home from './Home'
 
-const MainApp = ({ database, isMobile, invoice, setInvoice, showExitConfirmation, entries, setShowExitConfirmation, setEditInvoice, editInvoice }) => {
+const MainApp = ({ setFormData, formData, database, isMobile, invoice, setInvoice, showExitConfirmation, entries, setShowExitConfirmation, setEditInvoice, editInvoice }) => {
   return (
     <div>
       {isMobile ? (
@@ -18,7 +18,7 @@ const MainApp = ({ database, isMobile, invoice, setInvoice, showExitConfirmation
           <Navigation />
           {invoice && (
           <div className=' flex[1] relative flex flex-col '>
-            <InvoiceModal database={database} setInvoice={setInvoice} setShowExitConfirmation={setShowExitConfirmation} setEditInvoice={setEditInvoice} invoice={invoice} />
+            <InvoiceModal database={database} setInvoice={setInvoice} setShowExitConfirmation={setShowExitConfirmation} setEditInvoice={setEditInvoice} invoice={invoice} entries={entries} />
           </div>)}
           <Home setInvoice={setInvoice} showExitConfirmation={showExitConfirmation} entries={entries} />
         </div>
