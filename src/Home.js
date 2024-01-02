@@ -5,7 +5,7 @@ import Invoice from './Invoice'
 import IMG from './images/looking.png'
 // import Modal from './Modal'
 
-const Home = ({ setInvoice, showExitConfirmation, entries }) => {
+const Home = ({ setInvoice, showExitConfirmation, entries, isPaid }) => {
   const [filterMenu, setFilterMenu] = useState(false);
 
   const toggleMenu = () => {
@@ -36,18 +36,18 @@ const Home = ({ setInvoice, showExitConfirmation, entries }) => {
                 <li className='cursor-pointer text-[12px] p-[10px_20px] hover:text-black hover:bg-white'>Clear Filter</li>
             </ul>)}
            </div>
-           <div className='items-center flex'>
-            <div className='flex mr-2 rounded-[50%] p-[8px] items-center justify-center bg-white'>
+           <div onClick={toggleInvoice} className='items-center flex bg-[#7c5dfa] rounded-[40px] p-[8px_10px] cursor-pointer'>
+            <div className='flex mr-2 rounded-[50%]  bg-white'>
               <HeightIcon className=''/>
             </div>
-            <span onClick={toggleInvoice} className='cursor-pointer p-[8px_10px] bg-[#7c5dfa] rounded-[40px] text-[12px]'>New Invoice</span>
+            <span className='text-[12px]'>New Invoice</span>
            </div>
         </div>
       </div>
       {entries.length > 0 ? (
         entries.map((entry, index) => (
         <div className='flex justify-center' key={index}>
-          <Invoice entry={entry}/>
+          <Invoice entry={entry} isPaid={isPaid} />
         </div>))
       ) : (
         <div className='mt-[160px] items-center flex flex-col'>

@@ -12,6 +12,8 @@ const App = ({ database }) => {
   const [invoice, setInvoice] = useState(false);
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
 
+  const [isPaid,setIsPaid] = useState(false);
+
 //   const [dueDate, setDueDate] = useState('');
 
 //   const [formData, setFormData] = useState({
@@ -69,8 +71,8 @@ const App = ({ database }) => {
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/entry/:id"  element={<InvoiceView entries={entries} setEntries={setEntries} database={database} setEditInvoice={setEditInvoice} editInvoice={editInvoice} setInvoice={setInvoice} />} />
-    <Route index element={<MainApp database={database} isMobile={isMobile} invoice={invoice} setInvoice={setInvoice} showExitConfirmation={showExitConfirmation} entries={entries} setShowExitConfirmation={setShowExitConfirmation} setEditInvoice={setEditInvoice} />} />
+      <Route path="/entry/:id"  element={<InvoiceView isPaid={isPaid} setIsPaid={setIsPaid} entries={entries} setEntries={setEntries} database={database} setEditInvoice={setEditInvoice} editInvoice={editInvoice} setInvoice={setInvoice} />} />
+    <Route index element={<MainApp isPaid={isPaid} database={database} isMobile={isMobile} invoice={invoice} setInvoice={setInvoice} showExitConfirmation={showExitConfirmation} entries={entries} setShowExitConfirmation={setShowExitConfirmation} setEditInvoice={setEditInvoice} />} />
     </Routes>
     </BrowserRouter>
   )

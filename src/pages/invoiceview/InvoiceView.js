@@ -8,10 +8,8 @@ import {useNavigate} from 'react-router-dom'
 
 
   
-const InvoiceView = ({ database, entries, setEntries, setInvoice, setEditInvoice, editInvoice }) => {
+const InvoiceView = ({ isPaid, setIsPaid, database, entries, setEntries, setInvoice, setEditInvoice, editInvoice }) => {
   const navigate = useNavigate();
-
-  const [isPaid,setIsPaid] = useState(false);
 
   const { id } = useParams();
 
@@ -33,6 +31,10 @@ const InvoiceView = ({ database, entries, setEntries, setInvoice, setEditInvoice
   if (!entries) {
     return <div>Loading...</div>;
   };
+
+  const goBack = () => {
+    navigate("/");    
+  }
 
   const toggleEdit = () => {
     setEditInvoice(true);
@@ -67,23 +69,24 @@ const InvoiceView = ({ database, entries, setEntries, setInvoice, setEditInvoice
      </div>)}
 
     <div className='mb-8 items-center text-white text-[12px]'>
-      <Link to="/" className='no-underline text-[initial] flex mb-8 items-center text-white text-[12px]'>
+      <div onClick={goBack} className='cursor-pointer no-underline text-[initial] flex mb-8 items-center text-white text-[12px]'>
         <ArrowLeftIcon className='mr-4 w-[7px] h-[10px]' /> Go Back
-      </Link>
+      </div>
       {/* header */}
       <div className='flex bg-[#1e2139] rounded-[20px] w-[44rem] items-center p-[24px_32px] text-[12px]'>
         <div className=' flex items-center '>
           <span className='text-[#dfe3fa]'>Status</span>
           <div className='status-button flex ml-3'>
-            {/* <span className='bg-[#33d69f]'>Paid</span>
-            <span>Draft</span> */}
-            <span className='bg-[#ff8f00] p-2 cursor-pointer rounded-md w-24 text-center'>Pending</span>
+            {isPaid ? <span className='bg-[#33d69f] p-2 cursor-pointer rounded-md w-24 text-center'>Paid</span> : 
+            <span className='bg-[#ff8f00] p-2 cursor-pointer rounded-md w-24 text-center'>Pending</span>}
           </div>
         </div>
         <div className='flex flex-[1] justify-end'>
           <button onClick={toggleEdit} className='text-white  bg-[#500050] cursor-pointer p-[16px_24px] rounded-3xl border-none text-[12px] mr-[8px]'>Edit</button>
           <button onClick={handleDelete} className='red text-white bg-[#ec5757] cursor-pointer p-[16px_24px] rounded-3xl border-none text-[12px] mr-[8px]'>Delete</button>
-          <button onClick={handleClick} className='green text-white bg-[#33d69f] cursor-pointer p-[16px_24px] rounded-3xl border-none text-[12px]'>{isPaid ? "Mark as Pending" : "Mark as Paid"}</button>
+          {isPaid ?
+            <button onClick={handleClick} className='green text-white bg-yellow-600 cursor-pointer p-[16px_24px] rounded-3xl border-none text-[12px]'>Mark as pending</button>
+           : <button onClick={handleClick} className='green text-white bg-[#33d69f] cursor-pointer p-[16px_24px] rounded-3xl border-none text-[12px]'>Mark as Paid</button>}
         </div>
       </div>
 
