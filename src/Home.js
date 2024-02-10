@@ -18,7 +18,7 @@ const Home = ({ setInvoice, showExitConfirmation, entries, isPaid }) => {
 
   return (
 
-    <div className='text-white min-w-[80%] w-full'>
+    <div className='just so boring text-white min-w-[80%] w-full'>
       <div className='flex justify-center p-4'> 
         <div className='flex flex-col flex-[0.3]'>
            <h1 className='text-2xl font-bold'>Invoices</h1>
