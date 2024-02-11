@@ -1,6 +1,5 @@
-import { useState, useEffect} from 'react'
+import {useEffect} from 'react'
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import {Link} from 'react-router-dom'
 import { useParams } from 'react-router-dom';
 import { ref, onValue, remove } from 'firebase/database';
 import InvoiceModal from '../../InvoiceModal'
@@ -38,6 +37,7 @@ const InvoiceView = ({ isPaid, setIsPaid, database, entries, setEntries, setInvo
 
   const toggleEdit = () => {
     setEditInvoice(true);
+    
   };
 
   const handleDelete = () => {
