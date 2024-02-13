@@ -6,7 +6,6 @@ import InvoiceModal from '../../InvoiceModal'
 import {useNavigate} from 'react-router-dom'
 
 
-  
 const InvoiceView = ({ isPaid, setIsPaid, database, entries, setEntries, setInvoice, setEditInvoice, editInvoice }) => {
   const navigate = useNavigate();
 
