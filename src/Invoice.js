@@ -16,6 +16,7 @@ const Invoice = ({ entry, isPaid }) => {
           {isPaid ? <span className='bg-[#33d69f] p-2 cursor-pointer rounded-md w-24 text-center'>Paid</span> :
           <span className='bg-[#ff8f00] p-2 cursor-pointer rounded-md w-24 text-center'>Pending</span>}
         </div>
+        
         <div className='icon'>
           <ArrowRightIcon />
         </div>
