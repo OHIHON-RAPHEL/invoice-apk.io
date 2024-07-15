@@ -105,6 +105,7 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database, setEditIn
         price: "",
     })
 
+    
     setInvoice(false)
 
     return handleUpdateInvoice();
