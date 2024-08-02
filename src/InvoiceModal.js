@@ -90,6 +90,7 @@ const InvoiceModal = ({ setInvoice, setShowExitConfirmation, database, setEditIn
       console.log(error);
     }
     
+    
     setFormData({
         clientStreetAddress: "",
         clientCity: "",
