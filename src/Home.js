@@ -5,7 +5,6 @@ import Invoice from './Invoice'
 import IMG from './images/looking.png'
 // import Modal from './Modal'
 
-
 const Home = ({ setInvoice, showExitConfirmation, entries, isPaid }) => {
   const [filterMenu, setFilterMenu] = useState(false);
 
