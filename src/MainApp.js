@@ -3,6 +3,7 @@ import Navigation from './Navigation'
 import InvoiceModal from './InvoiceModal'
 import Home from './Home'
 
+
 const MainApp = ({ isPaid, database, isMobile, invoice, setInvoice, showExitConfirmation, entries, setShowExitConfirmation, setEditInvoice, editInvoice }) => {
   return (
     <div>
