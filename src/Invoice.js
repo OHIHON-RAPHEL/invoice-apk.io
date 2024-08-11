@@ -2,6 +2,7 @@ import React from 'react'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import {Link} from 'react-router-dom'
 
+
 const Invoice = ({ entry, isPaid }) => { 
   return ( 
     
