@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 const Modal = ({ showExitConfirmation }) => {
   return (
     <div className=' z-100 fixed justify-center items-center h-screen w-full flex'>
